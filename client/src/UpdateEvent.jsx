@@ -15,7 +15,7 @@ const UpdateEvent = () => {
     useEffect(() => {
         const fetchEvent = async () => {
             try {
-                const res = await axios.get(`http://localhost:3001/getEvent/${id}`);
+                const res = await axios.get(`${config.apiBaseUrl}/getEvent/${id}`);
                 const { eventname, eventplace, eventdate, image } = res.data;
 
                 const formattedDate = new Date(eventdate).toISOString().split('T')[0];
