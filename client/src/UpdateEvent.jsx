@@ -16,6 +16,7 @@ const UpdateEvent = () => {
         const fetchEvent = async () => {
             try {
                 const res = await axios.get(`${config.apiBaseUrl}/getEvent/${id}`);
+                console.log("API Response:", res.data);
                 const { eventname, eventplace, eventdate, image } = res.data;
 
                 const [day, month, year] = eventdate.split('-');
@@ -46,7 +47,7 @@ const UpdateEvent = () => {
         const formData = new FormData();
         formData.append("eventname", eventname);
         formData.append("eventplace", eventplace);
-        formData.append("eventdate", eventdate);
+        formData.append("eventdate", eventdate); // This should be in YYYY-MM-DD format
 
         if (image) {
             formData.append("image", image);
