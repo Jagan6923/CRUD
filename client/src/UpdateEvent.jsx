@@ -52,7 +52,7 @@ const UpdateEvent = () => {
         }
 
         try {
-            await axios.put(`http://localhost:3001/updateEvent/${id}`, formData, {
+            await axios.put(`${config.apiBaseUrl}/updateEvent/${id}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             navigate("/");
