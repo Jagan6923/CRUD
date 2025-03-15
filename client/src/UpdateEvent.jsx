@@ -18,7 +18,8 @@ const UpdateEvent = () => {
                 const res = await axios.get(`${config.apiBaseUrl}/getEvent/${id}`);
                 const { eventname, eventplace, eventdate, image } = res.data;
 
-                const formattedDate = new Date(eventdate).toISOString().split('T')[0];
+                const [day, month, year] = eventdate.split('-');
+                const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 
                 setEventName(eventname);
                 setEventPlace(eventplace);
@@ -52,9 +53,10 @@ const UpdateEvent = () => {
         }
 
         try {
-            await axios.put(`${config.apiBaseUrl}/updateEvent/${id}`, formData, {
+            const res = await axios.put(`${config.apiBaseUrl}/updateEvent/${id}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
+            console.log("Update Response:", res.data);
             navigate("/");
         } catch (err) {
             console.error("Error updating event:", err);
