@@ -16,7 +16,9 @@ app.use(cors({
     origin: [
         'http://localhost:5173',
         'http://localhost:3001',
-        'https://yourdomain.com'
+        'https://yourdomain.com',
+        "https://crud-blue-iota.vercel.app",
+        "https://crud-v2uf.vercel.app/",
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
