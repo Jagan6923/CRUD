@@ -1,6 +1,6 @@
 // config.js
 const config = {
-    apiBaseUrl: "http://localhost:3001"
+    apiBaseUrl: "https://crud-59p1.vercel.app/"
 };
 
 export default config;
