@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import config from "./config";
 
 const UpdateEvent = () => {
     const { id } = useParams();
@@ -16,7 +15,7 @@ const UpdateEvent = () => {
     useEffect(() => {
         const fetchEvent = async () => {
             try {
-                const res = await axios.get(`${config.apiBaseUrl}/getEvent/${id}`);
+                const res = await axios.get(`http://localhost:3001/getEvent/${id}`);
                 const { eventname, eventplace, eventdate, image } = res.data;
 
                 const formattedDate = new Date(eventdate).toISOString().split('T')[0];
@@ -53,7 +52,7 @@ const UpdateEvent = () => {
         }
 
         try {
-            await axios.put(`${config.apiBaseUrl}/updateEvent/${id}`, formData, {
+            await axios.put(`http://localhost:3001/updateEvent/${id}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             navigate("/");

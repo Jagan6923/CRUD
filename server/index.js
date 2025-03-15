@@ -70,19 +70,19 @@ app.get("/", async (req, res) => {
     }
 });
 
+// Get a single event
 app.get("/getEvent/:id", async (req, res) => {
     try {
         const event = await EventModel.findById(req.params.id);
         if (!event) return res.status(404).json({ error: "Event not found" });
         res.json({
             ...event._doc,
-            eventdate: moment(event.eventdate).format("DD-MM-YYYY"),
+            eventdate: moment(event.eventdate).format("DD-MM-YYYY")
         });
     } catch (err) {
         res.status(500).json({ error: "Error fetching event" });
     }
 });
-
 app.post("/createEvent", upload.single("image"), async (req, res) => {
     try {
         console.log("Request body:", req.body);
@@ -116,25 +116,29 @@ app.post("/createEvent", upload.single("image"), async (req, res) => {
     }
 });
 
-app.put("/updateEvent/:id", upload.single("image"), async (req, res) => {
+app.put("/updateEvent/:id", upload.single("image"), express.json(), async (req, res) => {
     try {
         const { eventname, eventplace, eventdate } = req.body;
 
+        // Validate input data
         if (!eventname || !eventplace || !eventdate) {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
+        // Ensure date is properly parsed
         const parsedDate = new Date(eventdate);
         if (isNaN(parsedDate)) {
             return res.status(400).json({ error: "Invalid date format" });
         }
 
+        // Prepare update data
         const updateData = {
             eventname,
             eventplace,
-            eventdate: parsedDate,
+            eventdate: parsedDate
         };
 
+        // Only update image if a new file is uploaded
         if (req.file) {
             updateData.image = req.file.path;
         }
@@ -142,10 +146,15 @@ app.put("/updateEvent/:id", upload.single("image"), async (req, res) => {
         console.log("Updating event with ID:", req.params.id);
         console.log("Update data:", updateData);
 
-        const updatedEvent = await EventModel.findByIdAndUpdate(req.params.id, updateData, {
-            new: true,
-            runValidators: true,
-        });
+        // Find and update the event
+        const updatedEvent = await EventModel.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            {
+                new: true,  // Return the updated document
+                runValidators: true  // Run model validations
+            }
+        );
 
         if (!updatedEvent) {
             return res.status(404).json({ error: "Event not found" });
@@ -154,10 +163,12 @@ app.put("/updateEvent/:id", upload.single("image"), async (req, res) => {
         res.json(updatedEvent);
     } catch (err) {
         console.error("Error updating event:", err);
-        res.status(500).json({ error: "Error updating event" });
+        res.status(500).json({
+            error: "Error updating event",
+            details: err.message
+        });
     }
 });
-
 app.delete("/deleteEvent/:id", async (req, res) => {
     try {
         const event = await EventModel.findByIdAndDelete(req.params.id);
